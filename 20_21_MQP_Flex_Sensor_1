@@ -1,0 +1,31 @@
+
+//*** CONSTANTS AND VARIABLES ****
+//Defining Flex Sensors into their Analog Pins. Three flex sensors used.
+const int flex1 = A0; //Flex Sensor 1 on Right Side of Tongue
+//const int flex2 = A1; //Flex Sensor 2 in the middle of the tongue
+//const int flex3 = A2; //Flex Sensor 3 on the Left Side of Tongue
+//Parameters for the Flex Sensor Design
+const float VCC = 3.3; //Flex Sensor operating voltage defined
+const float R_DIVIDER = 47000.0 //Resistor for voltage divider
+const float flatResistance = 25000.0; //Resistance when flex sensor is flat
+const float bendResistance = 100000.0; //Max bend resistance
+
+void setup() {
+  // put your setup code here, to run once:
+Serial.begin(9600);
+pinMode(flex1,INPUT);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  //Voltage Divider Rule to Calculate Resistance
+intADCflex = analogRead(flex1);
+float Vflex = ADCflex*VCC/1023.0;
+float ResistorFlex = R_DIV*(VCC/Vflex-1.0);
+Serial.println("Resistance:" + String(Rflex) + "Ohms");
+//Calculating the Angle of the Bend
+float angle = map(Rflex, flatResistance, bendResistance, 0, 90.0);
+Serial.println("Bend:" + String(angle) + "degrees");
+Serial.println();
+delay(500);
+}
