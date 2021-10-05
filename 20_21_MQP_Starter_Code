@@ -1,0 +1,102 @@
+// MQP Code - Magnetic Actuation
+
+//*** LIBRARIES TO INCLUDE ****
+
+#include <Wire.h>
+
+//*** CONSTANTS AND VARIABLES *****
+
+// PINOUTS - see Pin Out Diagram in Sarah's Daily Reports
+int Solenoid = 3; //Electromagnetic Solenoid defined in Digital Port 3
+int fsrPin = A0; //Force Sensor Variables
+int fsrReading;
+int fsrVoltage;
+unsigned long fsrResistance; //Voltage converted to resistance value which can be long.
+unsigned long fsrConductance; 
+long fsrForce; //Convert resistance to force
+
+// Other MISC Constants
+
+int Fsrmin = 0; //Min Analog Reading of the pressure sensor
+//float cur_fsrForce[1]; // initialize cur_force array to store force values
+//Lowest & highest Readings of the force sensor
+const int sensorMin = 0; //Analog readings from the force sensor
+const int sensorMax = 5; //Analog readings from the force sensor
+
+void setup() {
+  // put your setup code here, to run once:
+pinMode(Solenoid,OUTPUT); //Magnetic Solenoid output
+// Starting Serial Monitor with Baud Rate of 9600 which is common. 
+Serial.begin(9600);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+int  fsrReading = analogRead(fsrPin);
+  // Map the Force Sensor range to set up the switch cases
+int range = map(fsrReading, sensorMin, sensorMax, 0, 3); //the 0-3 sets up the code to have 4 different switch cases in total
+  Serial.print("Analog reading = ");
+  Serial.println(fsrReading);
+ //
+ switch (range) {
+  case 0: //no food on tongue
+    Serial.println("No Food or Liquid on the Tongue");
+    break;
+  case 1:
+  Serial.println("Liquid on the Tongue");
+    break;
+  case 2: 
+    Serial.println("Food on the Tongue");
+    break;
+  case 3: 
+    Serial.println("Food & Liquid on the Tongue");
+    break;
+ }
+ delay (1);
+ if (switch == case 0){
+  analogWrite(Solenoid, 100);
+ }
+  if (switch == case 1){
+  analogWrite(Solenoid, 150);
+ }
+  if (switch == case 2){
+  analogWrite(Solenoid, 200);
+  }
+  if (switch == case 3){
+  analogWrite(Solenoid, 250);
+  }
+ }
+
+ 
+//  if (fsrVoltage == 0) {
+//    Serial.println("No pressure");  
+//  } else {
+//    // The voltage = Vcc * R / (R + FSR) where R = 10K and Vcc = 3.3V changed to 3.3V for our purposes
+//    // so FSR = ((Vcc - V) * R) / V      
+//    fsrResistance = 3300 - fsrVoltage;     // fsrVoltage is in millivolts so 5V = 5000mV
+//    fsrResistance *= 10000;                // 10K resistor
+//    fsrResistance /= fsrVoltage;
+//    Serial.print("FSR resistance in ohms = ");
+//    Serial.println(fsrResistance);
+// 
+//    fsrConductance = 1000000;           // we measure in micromhos so 
+//    fsrConductance /= fsrResistance;
+//    Serial.print("Conductance in microMhos: ");
+//    Serial.println(fsrConductance);
+// 
+//    // Use the two FSR guide graphs to approximate the force
+//    if (fsrConductance <= 1000) {
+//      fsrForce = fsrConductance / 80;
+//      Serial.print("Force in Newtons: ");
+//      Serial.println(fsrForce);      
+//    } else {
+//      fsrForce = fsrConductance - 1000;
+//      fsrForce /= 30;
+//      Serial.print("Force in Newtons: ");
+//      Serial.println(fsrForce);            
+//    }
+    
+ // }
+//  Serial.println("--------------------");
+ // delay(1000);
+//}
