@@ -61,20 +61,17 @@ void loop() { // put your main code here, to run repeatedly:
         Serial.println("ENOUGH PRESSURE oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
   } 
    }
+   Serial.println("Solenoid is not powered");
   }
   
   else{
     //If not in use, turn solenoid off
      solTime = currTime;
      digitalWrite(control,LOW); // turn the MOSFET Switch OFF
+     Serial.println("Solenoid is not powered");
      solOn = 1;
   }  
 
-    //checking if  solOn work
-    if(solOn)
-      Serial.println("Solenoid is powered ");  
-    else
-     Serial.println("Solenoid is not powered");
  Serial.println("-------------------- ");
 }
 
@@ -84,3 +81,5 @@ void loop() { // put your main code here, to run repeatedly:
     digitalWrite(control,LOW); // Turn the MOSFET Switch OFF
  }
 }
+
+

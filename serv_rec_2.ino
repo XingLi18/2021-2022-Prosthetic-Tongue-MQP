@@ -6,8 +6,8 @@
 RF24 radio(9, 10); // CE, CSN
 const byte address[6] = "00001";
 
-//1 for enough muscle, 0 for no muscle
-boolean muscle_state = 0;
+//transmitted values
+int muscle = 0;
 
 //Timer for servos
 unsigned long servTime = 0;  
@@ -44,17 +44,18 @@ void setup() {
 
 void loop() {
   unsigned long currTime = millis(); //Timer
-  int emgValue;
-  float emgThreshold;
 
  if (radio.available()) {//checks to make sure emg sensor is on the person I suppose
-    char text[32] = "";                 //Saving the incoming data
-    radio.read(&text, sizeof(text));    //Reading the data
-    radio.read(&emgValue, sizeof(emgValue));    //Reading the data
-    radio.read(&emgThreshold, sizeof(emgThreshold));    //Reading the data
+    radio.read(&muscle, sizeof(muscle));    //Reading the data
+    //radio.read(&emgValue, sizeof(emgValue));    //Reading the data
+    //radio.read(&emgThreshold, sizeof(emgThreshold));    //Reading the data
+    
+    Serial.print("Muscle on off ");
+    Serial.println(muscle);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  if(emgValue > emgThreshold){//This is where the servo gets turned on and off
+  if(muscle){//This is where the servo gets turned on and off
+    Serial.println("Muscle on--------------------------------------------------------------------");
    //If resistor detects something, do this
     Serial.print("Current time = ");
     Serial.println(servTime);
@@ -72,6 +73,7 @@ void loop() {
         Serial.println("ENOUGH MUSCLE xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ");
   } 
   else{
+    Serial.println("Muscle off ////////////////////////////////////////////////////////////////////////////");
     //If not in use, turn servo off
    if((currTime - servTime )>= twoSec){
      servTime = currTime;
@@ -91,11 +93,9 @@ void loop() {
 }
  else {
     Serial.println("No radio"); 
-    delay(250);
     //reset servo
     Servo1.write(0);
     Servo2.write(0);//max turn
  }
 }
-
 

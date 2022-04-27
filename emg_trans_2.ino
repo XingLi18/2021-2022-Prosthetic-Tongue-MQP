@@ -6,6 +6,8 @@ const byte address[6] = "00001";     //Byte of array representing the address. T
 
 int firstFiveTime = 0;                //determines if the code has run 5 times to average for threshold
 
+int muscle = 0;
+
 //some default threshold value
 float emgThreshold = 2.5;
 
@@ -26,19 +28,16 @@ void loop() {
   if(firstFiveTime < 5){
     firstFiveTime++;
     emgThreshold = (emgValue + emgThreshold)/2;
-    emgThreshold = emgThreshold + 100;
+    emgThreshold = emgThreshold + 50;
     Serial.println("Threshold update"); 
-  
   }
   Serial.print("EMG Threshold ="); 
   Serial.println(emgThreshold);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   if(emgValue > emgThreshold){//This is where the servo gets turned on and off
-   //If emg detects a flex, do this
-    const char text[] = "Muscles";
-    radio.write(&text, sizeof(text));                  //Sending the message to receiver
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    muscle = 1;
     //check emg value
     Serial.print("EMG value = ");
     Serial.println(emgValue);
@@ -46,19 +45,21 @@ void loop() {
     
     }
  else {
-    const char text[] = "No Muscles";
-    radio.write(&text, sizeof(text));                  //Sending the message to receiver 
+  muscle = 0;
     Serial.print("EMG value = ");
     Serial.println(emgValue);
     Serial.println("No muscle"); 
     
  }
- 
-  radio.write(&emgValue, sizeof(emgValue));  //Sending the message to receiver 
-  radio.write(&emgThreshold, sizeof(emgThreshold));  //Sending the message to receiver 
+
+ //check that proper stuff is sending
+  Serial.print("How many muscle you have? ");
+  Serial.println(muscle);
+  radio.write(&muscle, sizeof(muscle));  
+  //radio.write(&emgValue, sizeof(emgValue));  //Sending the message to receiver 
+  //radio.write(&emgThreshold, sizeof(emgThreshold));  //Sending the message to receiver 
   
   delay(100);//will code this out later
 }
 }
-
 
