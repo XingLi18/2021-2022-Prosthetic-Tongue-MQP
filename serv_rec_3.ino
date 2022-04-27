@@ -21,18 +21,15 @@ const long fourSec  = 4000;
 const long eightSec = 8000; 
 
 //servos are output
-int servoPin1 = 2; // Servo is pin 2 and 3
-int servoPin2 = 3; 
+int servoPin1 = 2; // Servo is pin 2
 
-// Create servo 1 and 2
+// Create servo 1
 Servo Servo1; 
-Servo Servo2; 
 
 void setup() {
   // put your setup code here, to run once:
   // Servo Setup 
   Servo1.attach(servoPin1); 
-  Servo2.attach(servoPin2); 
    
   Serial.begin(9600);
   
@@ -63,12 +60,10 @@ void loop() {
    if((currTime - servTime )>= twoSec){
      servTime = currTime;
      if(servOn){
-        Servo1.write(180);//max turn
-        Servo2.write(180);//max turn
+        Servo1.write(130);//max turn
         servOn = 0;}
      else{
-        Servo1.write(0);
-        Servo2.write(0);//max turn
+        Servo1.write(0);//Max turn
         servOn = 1;}}
         Serial.println("ENOUGH MUSCLE xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ");
   } 
@@ -78,7 +73,6 @@ void loop() {
    if((currTime - servTime )>= twoSec){
      servTime = currTime;
      Servo1.write(0);//max turn
-     Servo2.write(0);//max turn
      servOn = 1;}
   }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,8 +88,8 @@ void loop() {
  else {
     Serial.println("No radio"); 
     //reset servo
-    Servo1.write(0);
-    Servo2.write(0);//max turn
+    Servo1.write(0);//default to 0
  }
 }
+
 
